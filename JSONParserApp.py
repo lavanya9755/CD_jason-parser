@@ -5,6 +5,8 @@ from PyQt6.QtWidgets import (
     QTreeWidget, QTreeWidgetItem, QSplitter, QFileDialog, QLabel, QHBoxLayout
 )
 # from PyQt6.QtWidgets import QFileDialog
+from PyQt6.QtWidgets import QMessageBox
+
 import json
 
 
@@ -150,19 +152,25 @@ class JSONParserApp(QWidget):
     def save_json(self):
         json_text = self.json_input.toPlainText()
 
-    # Show file dialog to save JSON file
-        file_name, _ = QFileDialog.getSaveFileName(self, "Save JSON File", "", "JSON Files (*.json);;All Files (*)")
+        file_name, _ = QFileDialog.getSaveFileName(self, "Save JSON File","", "JSON Files (*.json);;All Files (*)")
 
         if file_name:
             try:
-            # Try to format and save the JSON content
-                parsed_data = json.loads(json_text)  # Validate JSON
+                parsed_data = json.loads(json_text)  
                 with open(file_name, 'w') as file:
                     json.dump(parsed_data, file, indent=4)
-            
-                self.tree_view.setHeaderLabel(f"JSON saved successfully to {file_name}")
+                self.show_message("Success", f"JSON saved successfully to:\n{file_name}")
             except Exception as e:
-                self.tree_view.setHeaderLabel(f"Error: {str(e)}")
+                self.show_message("Error", f"Failed to save JSON:\n{str(e)}", QMessageBox.Icon.Critical)
+
+    def show_message(self, title, message, icon=QMessageBox.Icon.Information):
+        msg_box = QMessageBox()
+        msg_box.setWindowTitle(title)
+        msg_box.setText(message)
+        msg_box.setIcon(icon)
+        msg_box.exec()
+
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
