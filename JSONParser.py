@@ -1,8 +1,7 @@
 class JSONParser:
     def __init__(self, json_string):
         self.json_string = json_string.strip()
-        self.index = 0  # Pointer to track parsing
-
+        self.index = 0 
     def parse(self):
         value = self._parse_value()
         self._skip_whitespace()
@@ -33,12 +32,12 @@ class JSONParser:
             raise ValueError(f"Invalid JSON value at index {self.index}")
 
     def _parse_string(self):
-        self.index += 1  # Skip opening "
+        self.index += 1  
         start = self.index
         while self.json_string[self.index] != '"':
             self.index += 1
         result = self.json_string[start:self.index]
-        self.index += 1  # Skip closing "
+        self.index += 1  
         return result
 
     def _parse_number(self):
@@ -49,27 +48,27 @@ class JSONParser:
 
     def _parse_object(self):
         obj = {}
-        self.index += 1  # Skip {
+        self.index += 1  
         while self.json_string[self.index] != '}':
             self._skip_whitespace()
             key = self._parse_string()
             self._skip_whitespace()
             if self.json_string[self.index] != ':':
                 raise ValueError("Expected ':' after key in object")
-            self.index += 1  # Skip :
+            self.index += 1 
             obj[key] = self._parse_value()
             self._skip_whitespace()
             if self.json_string[self.index] == '}':
                 break
             if self.json_string[self.index] != ',':
                 raise ValueError("Expected ',' in object")
-            self.index += 1  # Skip ,
-        self.index += 1  # Skip }
+            self.index += 1  
+        self.index += 1 
         return obj
 
     def _parse_array(self):
         arr = []
-        self.index += 1  # Skip [
+        self.index += 1  
         while self.json_string[self.index] != ']':
             self._skip_whitespace()
             arr.append(self._parse_value())
@@ -78,16 +77,16 @@ class JSONParser:
                 break
             if self.json_string[self.index] != ',':
                 raise ValueError("Expected ',' in array")
-            self.index += 1  # Skip ,
-        self.index += 1  # Skip ]
+            self.index += 1  
+        self.index += 1
         return arr
 
     def _skip_whitespace(self):
         while self.index < len(self.json_string) and self.json_string[self.index] in " \n\t\r":
             self.index += 1
 
-# Testing the parser
+# TESTING ONLY
 json_text = '{"name": "John", "age": 30, "isStudent": false, "marks": [90, 85, 88]}'
 parser = JSONParser(json_text)
 parsed_data = parser.parse()
-print(parsed_data)  # Expected Output: {'name': 'John', 'age': 30, 'isStudent': False, 'marks': [90, 85, 88]}
+print(parsed_data)  
