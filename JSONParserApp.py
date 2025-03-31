@@ -1,15 +1,11 @@
-# from JsonParser import JSONParser
-# 
 from PyQt6.QtWidgets import (
     QApplication, QWidget, QVBoxLayout, QTextEdit, QPushButton,
     QTreeWidget, QTreeWidgetItem, QSplitter, QFileDialog, QLabel, QHBoxLayout
 )
-# from PyQt6.QtWidgets import QFileDialog
+
 from PyQt6.QtWidgets import QMessageBox
 
 import json
-
-
 import sys
 import os
 sys.path.insert(0, os.path.dirname(__file__))
@@ -19,92 +15,89 @@ class JSONParserApp(QWidget):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Enhanced JSON Parser")
-        self.resize(800, 600)
+        self.resize(800,300)
         self.initUI()
 
     def initUI(self):
-        # Main Layout
+        
         layout = QVBoxLayout(self)
 
-        # Horizontal layout for buttons
         button_layout = QHBoxLayout()
 
-        # JSON Input Area
+     
         self.json_input = QTextEdit(self)
         self.json_input.setPlaceholderText("Enter JSON data here...")
 
-        # Tree View for Parsed JSON
+        
         self.tree_view = QTreeWidget(self)
         self.tree_view.setHeaderLabels(["Key", "Value"])
 
-        # Error Label
         self.error_label = QLabel("")
         self.error_label.setStyleSheet("color: red")
 
-        # Buttons
+        
         self.parse_button = QPushButton("Parse JSON")
         self.expand_button = QPushButton("Expand All")
         self.collapse_button = QPushButton("Collapse All")
         self.load_button = QPushButton("Load JSON")
         self.save_button = QPushButton("Save JSON")
 
-        # Add buttons to button layout
+       
         button_layout.addWidget(self.load_button)
         button_layout.addWidget(self.save_button)
         button_layout.addWidget(self.parse_button)
         button_layout.addWidget(self.expand_button)
         button_layout.addWidget(self.collapse_button)
 
-        # Splitter for resizable sections
+        
         splitter = QSplitter()
         splitter.addWidget(self.json_input)
         splitter.addWidget(self.tree_view)
         splitter.setSizes([300, 500])
 
-        # Add widgets to the main layout
         layout.addLayout(button_layout)
         layout.addWidget(splitter)
         layout.addWidget(self.error_label)
 
-        # Connect Buttons to Functions
+        
         self.parse_button.clicked.connect(self.parse_json)
         self.expand_button.clicked.connect(self.expand_all)
         self.collapse_button.clicked.connect(self.collapse_all)
         self.load_button.clicked.connect(self.load_json)
         self.save_button.clicked.connect(self.save_json)
 
-                # Apply custom styles
+               
         self.setStyleSheet("""
-        QWidget {
-        background-color: #f4f4f4; 
-        color: #333333; 
-    }
-    QTextEdit {
-         color: #000000;
-        background-color: #ffffff;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        padding: 8px;
-        font-size: 14px;
-    }
-    QPushButton {
-        background-color: #4CAF50;
-        color: white;
-        padding: 8px 15px;
-        border-radius: 5px;
-        border: 1px solid #45a049;
-        font-size: 14px;
-    }
-    QPushButton:hover {
-        background-color: #90EE90;
-       
-    }
-    QTreeWidget {
-        background-color: #ffffff;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-    }
-        """)
+            QWidget {
+            background-color: #f4f4f4; 
+            color: #333333; 
+            }
+            QTextEdit {
+                color: #000000;
+                background-color: #ffffff;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                padding: 8px;
+                font-size: 14px;
+            }
+            QPushButton {
+                background-color: #4CAF50;
+                color: white;
+                padding: 8px 15px;
+                border-radius: 5px;
+                border: 1px solid #45a049;
+                font-size: 14px;
+            }
+            QPushButton:hover {
+                background-color: #90EE90;
+            
+            }
+            QTreeWidget {
+                background-color: #ffffff;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+            }
+                """)
 
     def parse_json(self):
         json_text = self.json_input.toPlainText().strip()
