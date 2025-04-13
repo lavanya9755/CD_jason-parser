@@ -14,7 +14,7 @@ from JSONParser import *
 class JSONParserApp(QWidget):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Enhanced JSON Parser")
+        self.setWindowTitle("JSON Parser-CDproject")
         self.resize(800,300)
         self.initUI()
 
@@ -23,12 +23,10 @@ class JSONParserApp(QWidget):
         layout = QVBoxLayout(self)
 
         button_layout = QHBoxLayout()
-
-     
         self.json_input = QTextEdit(self)
         self.json_input.setPlaceholderText("Enter JSON data here...")
 
-        
+        ##
         self.tree_view = QTreeWidget(self)
         self.tree_view.setHeaderLabels(["Key", "Value"])
 
@@ -51,9 +49,9 @@ class JSONParserApp(QWidget):
 
         
         splitter = QSplitter()
-        splitter.addWidget(self.json_input)
-        splitter.addWidget(self.tree_view)
-        splitter.setSizes([300, 500])
+        splitter.addWidget(self.json_input) #text editor object
+        splitter.addWidget(self.tree_view) #tre view object
+        splitter.setSizes([300, 500]) #width of textedit and output
 
         layout.addLayout(button_layout)
         layout.addWidget(splitter)
@@ -102,8 +100,8 @@ class JSONParserApp(QWidget):
     def parse_json(self):
         json_text = self.json_input.toPlainText().strip()
         try:
-            parser = JSONParser(json_text)
-            json_data = parser.parse()
+            parser = JSONParser(json_text) #create a parser object
+            json_data = parser.parse() #convert the JSON string into a Python object 
             self.error_label.setText("")
             self.tree_view.clear()
             self.populate_tree(json_data, self.tree_view.invisibleRootItem())
@@ -144,14 +142,13 @@ class JSONParserApp(QWidget):
 
     def save_json(self):
         json_text = self.json_input.toPlainText()
-
         file_name, _ = QFileDialog.getSaveFileName(self, "Save JSON File","", "JSON Files (*.json);;All Files (*)")
 
         if file_name:
             try:
-                parsed_data = json.loads(json_text)  
+                parsed_data = json.loads(json_text)  # which converts it string into python object (dict,list)
                 with open(file_name, 'w') as file:
-                    json.dump(parsed_data, file, indent=4)
+                    json.dump(parsed_data, file, indent=4) # writes a Python dictionary or list into a JSON file.
                 self.show_message("Success", f"JSON saved successfully to:\n{file_name}")
             except Exception as e:
                 self.show_message("Error", f"Failed to save JSON:\n{str(e)}", QMessageBox.Icon.Critical)

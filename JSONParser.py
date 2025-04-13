@@ -1,6 +1,6 @@
 class JSONParser:
     def __init__(self, json_string):
-        self.json_string = json_string.strip()
+        self.json_string = json_string.strip() # Remove leading/trailing whitespace
         self.index = 0 
     def parse(self):
         value = self._parse_value()
@@ -10,9 +10,9 @@ class JSONParser:
         return value
 
     def _parse_value(self):
-        self._skip_whitespace()
+        self._skip_whitespace() # Skip leading whitespace
         if self.json_string[self.index] == '"':  
-            return self._parse_string()
+            return self._parse_string() 
         elif self.json_string[self.index].isdigit() or self.json_string[self.index] == '-':  
             return self._parse_number()
         elif self.json_string[self.index] == '{':  
@@ -32,12 +32,12 @@ class JSONParser:
             raise ValueError(f"Invalid JSON value at index {self.index}")
 
     def _parse_string(self):
-        self.index += 1  
-        start = self.index
+        self.index += 1  #to skip double colon
+        start = self.index #start of index
         while self.json_string[self.index] != '"':
             self.index += 1
-        result = self.json_string[start:self.index]
-        self.index += 1  
+        result = self.json_string[start:self.index] #result= string only
+        self.index += 1  #skip double quote
         return result
 
     def _parse_number(self):
@@ -48,7 +48,7 @@ class JSONParser:
 
     def _parse_object(self):
         obj = {}
-        self.index += 1  
+        self.index += 1   #skip curly bracket
         while self.json_string[self.index] != '}':
             self._skip_whitespace()
             key = self._parse_string()
@@ -82,11 +82,11 @@ class JSONParser:
         return arr
 
     def _skip_whitespace(self):
-        while self.index < len(self.json_string) and self.json_string[self.index] in " \n\t\r":
+        while self.index < len(self.json_string) and self.json_string[self.index] in " \n\t":
             self.index += 1
 
 # TESTING ONLY
 json_text = '{"name": "John", "age": 30, "isStudent": false, "marks": [90, 85, 88]}'
 parser = JSONParser(json_text)
 parsed_data = parser.parse()
-print(parsed_data)  
+# print(parsed_data)  
